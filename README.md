@@ -1,55 +1,29 @@
-# Dashboard de Ordens de Serviço (OS) 📊
+# Dashboard Monitoramento de Ordem de serviços (OS)
 
-## Visão Geral 🌐
+Esse dash foi criado para acompanhar as OS atenditas pelos colaboradores de informática e suporte do Procape
+Os dados são disponibilizados são extraidos do bando e salvos em `.xlsx` e `.csv`, (tem um erro no banco que estava atrapalhando a extração, infelizmente o DBA não resolveu ainda :( - ).
 
-Criação de um dashboard para verificação dos atendimentos das ordens de serviço. 💡
+### Extração de Dados (Rscript)
+Os dados atualizados dos scripts estão em Python, mais só foi disponibilizado para os integrantes do projeto o arquivo em RScript, ordens do supervisor, de todo modo, está ótimo.
+- Com nosso usuário de leitura, extraímos do BD os dados e salvamos em `.csv`.
+- Mais esse processo é feito em 3 partes(devido ao erro de  extração no banco): as duas primeiras extrações são feitas e após isso são combinadas em um arquivo.
 
-O sistema tem como objetivo carregar as informações exportadas em arquivos `.xlsx` e `.csv`, disponibilizados pelo setor de DBA, para filtragem e análise dos dados.
+### Correção dos Dados com Dicionário
 
-## Funcionamento do Sistema 💻
+- Por algum motivo que o DBA não informou os dados após a extração não são retornados em UTF-8, mesmo no banco estando, e devido a isso, tivemos que fazer tudo manualmente, todas as correções de nomes, setores, horários e etc...
 
-Os dados são extraídos do banco de dados (os caminhos originais foram alterados para preservação do ambiente). Existem quatro arquivos utilizados para o tratamento dos dados em Excel:
+### Aplicação das Correções 
 
-### 1. Extração de Dados (Rscript) 👨‍💻
+- Após a correção dos dados que vieram sem a formatação adequada, tivemos que fazer o "replace/mutate" dos dados seem utf-8 para utf-8, aalém disso também tivemos que corrigir nomes de colunas que vieram do nosso excel.
 
-- Após a conexão com o banco, os dados são extraídos e salvos em `.csv`.
-- O processo é dividido em três partes: primeira extração, segunda extração e combinação dos dados extraídos.
-- Essa divisão ocorre devido a uma inconsistência no banco, que já está sendo tratada pelo pessoal do DBA 😁👍.
+### Formatação das Datas 
 
-### 2. Correção dos Dados com Dicionário 📔
+- Os separadores das datas estavam variando muito, isso também devido aos dados já virem assim da aplicação que os pega e salva no banco, então tivemos que estudar e para fazer as trocas, deu trabalho, mas deu certo
 
-- Devido a inconsistências nos dados do banco relacionadas a caracteres especiais, foi utilizado um dicionário para padronizar os nomes dos setores e usuários.
+### Aplicação de execução
 
-### 3. Aplicação das Correções 👷‍♂️
+- O App.r é onde a aplicação vai buscar os modulos e executar um servidor local para exibir ao usuário gráfico simples porém que mostram bem o que se pretendia, mostrar o quantitativo de OS por dia, de cada atentende.
 
-- Com base nos dicionários corrigidos, utilizamos a função `mutate()` para substituir os nomes dos setores.
-- Também é feita a correção das colunas de datas: início, fim, atendimento, entre outras.
+## Ordem de execução dos Scripts
 
-### 4. Formatação das Datas 📅
-
-- Os separadores de datas são padronizados para garantir consistência na visualização.
-
-### 5. `app.R` 🚀👩‍🚀👨‍🚀
-
-- Aqui é onde a aplicação é disponibilizada para os usuários via web.
-- Os gráficos são gerados e há interações com o usuário, como aplicação de filtros e exibição dos dados tratados.
-
----
-
-## Execução dos Scripts 🤓👨‍💻
-
-Existe um arquivo chamado `executar_scripts.sh` que será executado no servidor e rodará todos os scripts de forma automática.
-
----
-
-## Comandos Úteis (em caso de falha por uso de memória) ✨
-
-```bash
-# Recarrega os arquivos de configuração
-sudo systemctl daemon-reload
-
-# Reinicia a aplicação
-sudo systemctl restart grafico_OS.service
-
-# Verifica o status do serviço
-sudo systemctl status grafico_OS.service
+procurar o nosso shell `executar_scripts.sh` nesse shell temos os scripts na ordem correta de execução, se seguir a mesma ordem que está, vai dar certo.
